@@ -16,12 +16,14 @@ let package = Package(
   ],
   dependencies: [
     .package(url: "https://github.com/pointfreeco/swift-composable-architecture.git", from: "0.38.3"),
+    .package(url: "https://github.com/malcommac/SwiftDate", from: "6.3.1")
   ],
   targets: [
     .target(
       name: "Hence",
       dependencies: [
-        .product(name: "ComposableArchitecture", package: "swift-composable-architecture")
+        .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
+        .product(name: "SwiftDate", package: "SwiftDate")
       ]
     ),
     .testTarget(
