@@ -5,6 +5,9 @@ import PackageDescription
 
 let package = Package(
   name: "Hence",
+  platforms: [
+    .iOS(.v16)
+  ],
   products: [
     .library(
       name: "Hence",
@@ -12,11 +15,14 @@ let package = Package(
     )
   ],
   dependencies: [
+    .package(url: "https://github.com/pointfreeco/swift-composable-architecture.git", from: "0.38.3"),
   ],
   targets: [
     .target(
       name: "Hence",
-      dependencies: []
+      dependencies: [
+        .product(name: "ComposableArchitecture", package: "swift-composable-architecture")
+      ]
     ),
     .testTarget(
       name: "HenceTests",

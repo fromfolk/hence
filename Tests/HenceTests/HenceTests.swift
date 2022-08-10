@@ -4,6 +4,6 @@ import XCTest
 
 final class HenceTests: XCTestCase {
   func testExample() throws {
-    XCTAssertEqual(Hence().text, "Hello, Hence!")
+
   }
 }
