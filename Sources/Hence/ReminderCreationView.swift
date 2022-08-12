@@ -3,13 +3,23 @@ import ComposableArchitecture
 import SwiftUI
 
 public struct ReminderCreationView: View {
-  private let store: Store<HenceState, HenceAction>
+  private let store: Store<ReminderCreationState, ReminderCreationAction>
   
   public var body: some View {
     WithViewStore(store) { viewStore in
       Form {
-        Text(viewStore.text)
-        Button(action: { viewStore.send(.showMessage) }) {
+        Section {
+          TextField(
+            "Name",
+            text: viewStore.binding(
+              get: \.name,
+              send: ReminderCreationAction.editName
+            )
+          )
+        }
+        
+        Text(viewStore.name)
+        Button(action: { viewStore.send(.showName) }) {
           Image(systemName: "globe")
         }
       }
@@ -18,7 +28,7 @@ public struct ReminderCreationView: View {
     .navigationBarTitleDisplayMode(.large)
   }
   
-  public init(store: Store<HenceState, HenceAction>) {
+  public init(store: Store<ReminderCreationState, ReminderCreationAction>) {
     self.store = store
   }
 }
@@ -28,9 +38,9 @@ struct ReminderCreationView_Previews: PreviewProvider {
     NavigationView {
       ReminderCreationView(
         store: Store(
-          initialState: HenceState(),
-          reducer: henceReducer,
-          environment: HenceEnvironment()
+          initialState: ReminderCreationState(),
+          reducer: reminderCreationReducer,
+          environment: ReminderCreationEnvironment()
         )
       )
     }

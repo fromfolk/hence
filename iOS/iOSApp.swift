@@ -4,9 +4,9 @@ import Hence
 import SwiftUI
 
 let store = Store(
-  initialState: HenceState(),
-  reducer: henceReducer,
-  environment: HenceEnvironment()
+  initialState: ReminderCreationState(),
+  reducer: reminderCreationReducer,
+  environment: ReminderCreationEnvironment()
 )
 
 @main
