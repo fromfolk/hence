@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		2B0C954628A3CC840098BC1C /* Hence in Frameworks */ = {isa = PBXBuildFile; productRef = 2B0C954528A3CC840098BC1C /* Hence */; };
 		2B1064D528A3CA0100C36230 /* iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B1064D428A3CA0100C36230 /* iOSApp.swift */; };
-		2B1064D728A3CA0100C36230 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B1064D628A3CA0100C36230 /* ContentView.swift */; };
 		2B1064D928A3CA0100C36230 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2B1064D828A3CA0100C36230 /* Assets.xcassets */; };
 		2B1064DC28A3CA0100C36230 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2B1064DB28A3CA0100C36230 /* Preview Assets.xcassets */; };
 		2BC9BDAC28A3CF49002C6CE8 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 2BC9BDAB28A3CF49002C6CE8 /* ComposableArchitecture */; };
@@ -18,7 +17,6 @@
 /* Begin PBXFileReference section */
 		2B1064D228A3CA0100C36230 /* iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2B1064D428A3CA0100C36230 /* iOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOSApp.swift; sourceTree = "<group>"; };
-		2B1064D628A3CA0100C36230 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		2B1064D828A3CA0100C36230 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2B1064DB28A3CA0100C36230 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -64,7 +62,6 @@
 			isa = PBXGroup;
 			children = (
 				2B1064D428A3CA0100C36230 /* iOSApp.swift */,
-				2B1064D628A3CA0100C36230 /* ContentView.swift */,
 				2B1064D828A3CA0100C36230 /* Assets.xcassets */,
 				2B1064DA28A3CA0100C36230 /* Preview Content */,
 			);
@@ -156,7 +153,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2B1064D728A3CA0100C36230 /* ContentView.swift in Sources */,
 				2B1064D528A3CA0100C36230 /* iOSApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

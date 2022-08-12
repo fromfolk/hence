@@ -5,15 +5,15 @@ import SwiftUI
 
 let store = Store(
   initialState: HenceState(),
-  reducer: appReducer,
+  reducer: henceReducer,
   environment: HenceEnvironment()
 )
 
 @main
-struct iOSApp: App {
+struct iOSApp: App {  
   var body: some Scene {
     WindowGroup {
-      ContentView(store: store)
+      ReminderCreationView(store: store)
     }
   }
 }

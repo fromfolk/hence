@@ -19,7 +19,7 @@ public struct HenceEnvironment {
   }
 }
 
-public let appReducer = Reducer<HenceState, HenceAction, HenceEnvironment> { state, action, environment in
+public let henceReducer = Reducer<HenceState, HenceAction, HenceEnvironment> { state, action, environment in
   switch(action) {
   case .showMessage:
     state.text = "Hello, Composable Hence!"
