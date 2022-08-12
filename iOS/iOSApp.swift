@@ -13,7 +13,9 @@ let store = Store(
 struct iOSApp: App {  
   var body: some Scene {
     WindowGroup {
-      ReminderCreationView(store: store)
+      NavigationView {
+        ReminderCreationView(store: store)
+      }
     }
   }
 }

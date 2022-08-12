@@ -25,14 +25,24 @@ public struct ReminderCreationView: View {
           case .daily:
             EmptyView()
           case .weekly:
-            Color.red
+            NavigationLink(destination: WeeklySelection(store: store)) {
+              HStack {
+                Text("On")
+                Spacer()
+                Text(
+                  viewStore
+                    .selectedWeekDays
+                    .map { $0.name(style: .short) }
+                    .joined(separator: ", ")
+                )
+                .foregroundColor(.secondary)
+              }
+            }
+            
           case .monthly:
             Color.blue
           }
         }
-        
-        Text(viewStore.name)
-        Text(viewStore.dateFrequency.rawValue)
       }
     }
     .navigationTitle("New Reminder")
