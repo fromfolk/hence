@@ -59,6 +59,14 @@ public struct ReminderCreationView: View {
           TimeFrequencyRow(store: store)
         }
       }
+      .toolbar {
+        ToolbarItem {
+          Button(action: {}) {
+            Text("Save")
+          }
+          .disabled(viewStore.isSaveDisabled)
+        }
+      }
     }
     .navigationTitle("New Reminder")
     .navigationBarTitleDisplayMode(.large)

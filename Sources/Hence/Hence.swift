@@ -15,11 +15,15 @@ public enum TimeFrequency: String, CaseIterable {
 }
 
 public struct ReminderCreationState: Equatable {
-  public var name = ""
-  public var dateFrequency = DateFrequency.daily
-  public var selectedWeekDays: [WeekDay] = Array()
-  public var selectedMonthDays: [Int] = Array()
-  public var timeFrequency = TimeFrequency.morning
+  var name = ""
+  var dateFrequency = DateFrequency.daily
+  var selectedWeekDays: [WeekDay] = Array()
+  var selectedMonthDays: [Int] = Array()
+  var timeFrequency = TimeFrequency.morning
+  
+  var isSaveDisabled: Bool {
+    name.isEmpty || (dateFrequency == .weekly && selectedWeekDays.isEmpty) || (dateFrequency == .monthly && selectedMonthDays.isEmpty)
+  }
   
   public init() {}
 }
