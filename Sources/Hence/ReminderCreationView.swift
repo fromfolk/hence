@@ -42,6 +42,8 @@ public struct ReminderCreationView: View {
           case .monthly:
             Color.blue
           }
+          
+          TimeFrequencyRow(store: store)
         }
       }
     }

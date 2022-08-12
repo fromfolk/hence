@@ -8,6 +8,12 @@ public enum DateFrequency: String, CaseIterable {
   case monthly = "Month"
 }
 
+public enum TimeFrequency: String, CaseIterable {
+  case morning = "Morning"
+  case afternoon = "Afternoon"
+  case evening = "Evening"
+}
+
 public struct ReminderCreationState: Equatable {
   let weekDays: [WeekDay] = [
     .monday,
@@ -22,6 +28,7 @@ public struct ReminderCreationState: Equatable {
   public var name = ""
   public var dateFrequency = DateFrequency.daily
   public var selectedWeekDays: [WeekDay] = Array()
+  public var timeFrequency = TimeFrequency.morning
   
   public init() {}
 }
@@ -30,6 +37,7 @@ public enum ReminderCreationAction {
   case editName(String)
   case dateFrequencyChanged(DateFrequency)
   case selectedWeekDaysChanged(WeekDay)
+  case timeFrequencyChanged(TimeFrequency)
 }
 
 public struct ReminderCreationEnvironment {
@@ -53,6 +61,10 @@ public let reminderCreationReducer = Reducer<ReminderCreationState, ReminderCrea
       state.selectedWeekDays.append(update)
     }
     state.selectedWeekDays.sort(by: { $0.rawValue < $1.rawValue } )
+    return .none
+    
+  case .timeFrequencyChanged(let update):
+    state.timeFrequency = update
     return .none
   }
 }
