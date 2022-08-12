@@ -18,10 +18,15 @@ public struct ReminderCreationView: View {
           )
         }
         
+        Section {
+          DateFrequencyRow(store: store)
+        }
+        
         Text(viewStore.name)
         Button(action: { viewStore.send(.showName) }) {
           Image(systemName: "globe")
         }
+        Text(viewStore.dateFrequency.rawValue)
       }
     }
     .navigationTitle("New Reminder")
