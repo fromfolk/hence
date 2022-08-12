@@ -10,16 +10,6 @@ struct DateFrequencyRow: View {
   let store: Store<ReminderCreationState, ReminderCreationAction>
   @ObservedObject var viewStore: ViewStore<ReminderCreationState, Self.Action>
   
-  init(store: Store<ReminderCreationState, ReminderCreationAction>) {
-    self.store = store
-    self.viewStore = ViewStore(
-      store.scope(
-        state: { $0 },
-        action: { ReminderCreationAction(action: $0)}
-      )
-    )
-  }
-  
   var body: some View {
     Picker(
       selection: viewStore.binding(
@@ -33,6 +23,16 @@ struct DateFrequencyRow: View {
       }, label: { Text("Each") }
     )
   }
+  
+  init(store: Store<ReminderCreationState, ReminderCreationAction>) {
+    self.store = store
+    self.viewStore = ViewStore(
+      store.scope(
+        state: { $0 },
+        action: { ReminderCreationAction(action: $0)}
+      )
+    )
+  }
 }
 
 struct DateFrequencyRow_Previews: PreviewProvider {
@@ -44,7 +44,6 @@ struct DateFrequencyRow_Previews: PreviewProvider {
         environment: ReminderCreationEnvironment()
       )
     )
-    .frame(width: 320, height: 44)
   }
 }
 

@@ -20,12 +20,18 @@ public struct ReminderCreationView: View {
         
         Section {
           DateFrequencyRow(store: store)
+          
+          switch(viewStore.dateFrequency) {
+          case .daily:
+            EmptyView()
+          case .weekly:
+            Color.red
+          case .monthly:
+            Color.blue
+          }
         }
         
         Text(viewStore.name)
-        Button(action: { viewStore.send(.showName) }) {
-          Image(systemName: "globe")
-        }
         Text(viewStore.dateFrequency.rawValue)
       }
     }
