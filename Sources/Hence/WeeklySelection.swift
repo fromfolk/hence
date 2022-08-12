@@ -8,12 +8,22 @@ struct WeeklySelection: View {
     case selectedWeekDaysChanged(WeekDay)
   }
   
+  private let weekDays: [WeekDay] = [
+    .monday,
+    .tuesday,
+    .wednesday,
+    .thursday,
+    .friday,
+    .saturday,
+    .sunday
+  ]
+  
   let store: Store<ReminderCreationState, ReminderCreationAction>
   @ObservedObject var viewStore: ViewStore<ReminderCreationState, Self.Action>
   
   var body: some View {
     List {
-      ForEach(viewStore.weekDays, id: \.rawValue) { weekDay in
+      ForEach(weekDays, id: \.rawValue) { weekDay in
         Button(action: { viewStore.send(.selectedWeekDaysChanged(weekDay)) }) {
           HStack {
             Text(weekDay.name(style: .default))
@@ -26,6 +36,7 @@ struct WeeklySelection: View {
         }
       }
     }
+    .navigationTitle("Select days")
   }
   
   init(store: Store<ReminderCreationState, ReminderCreationAction>) {
@@ -41,13 +52,15 @@ struct WeeklySelection: View {
 
 struct WeeklySelection_Previews: PreviewProvider {
   static var previews: some View {
-    WeeklySelection(
-      store: Store(
-        initialState: ReminderCreationState(),
-        reducer: reminderCreationReducer,
-        environment: ReminderCreationEnvironment()
+    NavigationView {
+      WeeklySelection(
+        store: Store(
+          initialState: ReminderCreationState(),
+          reducer: reminderCreationReducer,
+          environment: ReminderCreationEnvironment()
+        )
       )
-    )
+    }
   }
 }
 

@@ -24,6 +24,7 @@ public struct ReminderCreationView: View {
           switch(viewStore.dateFrequency) {
           case .daily:
             EmptyView()
+            
           case .weekly:
             NavigationLink(destination: WeeklySelection(store: store)) {
               HStack {
@@ -40,7 +41,19 @@ public struct ReminderCreationView: View {
             }
             
           case .monthly:
-            Color.blue
+            NavigationLink(destination: MonthlySelection(store: store)) {
+              HStack {
+                Text("On")
+                Spacer()
+                Text(
+                  viewStore
+                    .selectedMonthDays
+                    .map(String.init)
+                    .joined(separator: ", ")
+                )
+                .foregroundColor(.secondary)
+              }
+            }
           }
           
           TimeFrequencyRow(store: store)
