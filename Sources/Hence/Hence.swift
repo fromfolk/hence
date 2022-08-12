@@ -2,6 +2,16 @@
 import SwiftDate
 import ComposableArchitecture
 
+public struct Reminder: Identifiable, Equatable {
+  public let id: UUID
+  let name: String
+  let recurring: Recurring
+  
+  public static func == (lhs: Reminder, rhs: Reminder) -> Bool {
+    lhs.id == rhs.id
+  }
+}
+
 public enum DateFrequency: String, CaseIterable {
   case daily = "Day"
   case weekly = "Week"
@@ -15,6 +25,8 @@ public enum TimeFrequency: String, CaseIterable {
 }
 
 public struct ReminderCreationState: Equatable {
+  var reminders: [Reminder]
+  
   var name = ""
   var dateFrequency = DateFrequency.daily
   var selectedWeekDays: [WeekDay] = Array()
@@ -25,7 +37,9 @@ public struct ReminderCreationState: Equatable {
     name.isEmpty || (dateFrequency == .weekly && selectedWeekDays.isEmpty) || (dateFrequency == .monthly && selectedMonthDays.isEmpty)
   }
   
-  public init() {}
+  public init(reminders: [Reminder] = Array()) {
+    self.reminders = reminders
+  }
 }
 
 public enum ReminderCreationAction {
@@ -34,10 +48,17 @@ public enum ReminderCreationAction {
   case selectedWeekDaysChanged(WeekDay)
   case selectedMonthDaysChanged(Int)
   case timeFrequencyChanged(TimeFrequency)
+  case save
 }
 
 public struct ReminderCreationEnvironment {
-  public init() {}
+  let uuid: () -> UUID
+  
+  public init(uuid: @escaping () -> UUID) {
+    self.uuid = uuid
+  }
+  
+  public static var live = ReminderCreationEnvironment(uuid: UUID.init)
 }
 
 public let reminderCreationReducer = Reducer<ReminderCreationState, ReminderCreationAction, ReminderCreationEnvironment> { state, action, environment in
@@ -71,5 +92,47 @@ public let reminderCreationReducer = Reducer<ReminderCreationState, ReminderCrea
   case .timeFrequencyChanged(let update):
     state.timeFrequency = update
     return .none
+    
+  case .save:
+    let reminder: Reminder
+    
+    switch state.dateFrequency {
+    case .daily:
+      reminder = Reminder(
+        id: environment.uuid(),
+        name: state.name,
+        recurring: .daily(at: .init(state.timeFrequency))
+      )
+      
+    case .weekly:
+      reminder = Reminder(
+        id: environment.uuid(),
+        name: state.name,
+        recurring: .weekly(on: state.selectedWeekDays, at: .init(state.timeFrequency))
+      )
+      
+    case .monthly:
+      reminder = Reminder(
+        id: environment.uuid(),
+        name: state.name,
+        recurring: .monthly(on: state.selectedMonthDays, at: .init(state.timeFrequency))
+      )
+    }
+    
+    state.reminders.append(reminder)
+    return .none
+  }
+}
+
+fileprivate extension TimeOfDay {
+  init(_ timeFrequency: TimeFrequency) {
+    switch timeFrequency {
+    case .morning:
+      self = .morning
+    case .afternoon:
+      self = .afternoon
+    case .evening:
+      self = .evening
+    }
   }
 }

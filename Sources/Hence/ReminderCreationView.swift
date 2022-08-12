@@ -61,7 +61,7 @@ public struct ReminderCreationView: View {
       }
       .toolbar {
         ToolbarItem {
-          Button(action: {}) {
+          Button(action: { viewStore.send(.save) }) {
             Text("Save")
           }
           .disabled(viewStore.isSaveDisabled)
@@ -84,7 +84,7 @@ struct ReminderCreationView_Previews: PreviewProvider {
         store: Store(
           initialState: ReminderCreationState(),
           reducer: reminderCreationReducer,
-          environment: ReminderCreationEnvironment()
+          environment: .live
         )
       )
     }

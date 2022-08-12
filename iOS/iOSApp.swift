@@ -5,8 +5,8 @@ import SwiftUI
 
 let store = Store(
   initialState: ReminderCreationState(),
-  reducer: reminderCreationReducer,
-  environment: ReminderCreationEnvironment()
+  reducer: reminderCreationReducer.debug(),
+  environment: .live
 )
 
 @main

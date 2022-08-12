@@ -41,7 +41,7 @@ struct DateFrequencyRow_Previews: PreviewProvider {
       store: Store(
         initialState: ReminderCreationState(),
         reducer: reminderCreationReducer,
-        environment: ReminderCreationEnvironment()
+        environment: .live
       )
     )
   }
