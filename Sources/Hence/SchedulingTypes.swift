@@ -37,6 +37,21 @@ public enum TimeOfDay: Hashable {
       return offset.interval
     }
   }
+  
+  public var string: String {
+    switch self {
+    case .morning:
+      return "morning"
+    case .afternoon:
+      return "afternoon"
+    case .evening:
+      return "evening"
+    case .allDay:
+      return "all day"
+    case .custom:
+      return "custom"
+    }
+  }
 }
 
 public enum Recurring {
