@@ -38,11 +38,12 @@ public enum TimeFrequency: String, CaseIterable {
 public struct ReminderCreationState: Equatable {
   var reminders: [Reminder]
   
-  var name = ""
+  var name = String()
   var dateFrequency = DateFrequency.daily
   var selectedWeekDays: [WeekDay] = Array()
   var selectedMonthDays: [Int] = Array()
   var timeFrequency = TimeFrequency.morning
+  var showingBanner = false
   
   var isSaveDisabled: Bool {
     name.isEmpty || (dateFrequency == .weekly && selectedWeekDays.isEmpty) || (dateFrequency == .monthly && selectedMonthDays.isEmpty)
@@ -60,16 +61,19 @@ public enum ReminderCreationAction {
   case selectedMonthDaysChanged(Int)
   case timeFrequencyChanged(TimeFrequency)
   case save
+  case removeBanner
 }
 
 public struct ReminderCreationEnvironment {
   let uuid: () -> UUID
+  let mainQueue: AnySchedulerOf<DispatchQueue>
   
-  public init(uuid: @escaping () -> UUID) {
+  public init(uuid: @escaping () -> UUID, mainQueue: AnySchedulerOf<DispatchQueue>) {
     self.uuid = uuid
+    self.mainQueue = mainQueue
   }
   
-  public static var live = ReminderCreationEnvironment(uuid: UUID.init)
+  public static var live = ReminderCreationEnvironment(uuid: UUID.init, mainQueue: .main)
 }
 
 public let reminderCreationReducer = Reducer<ReminderCreationState, ReminderCreationAction, ReminderCreationEnvironment> { state, action, environment in
@@ -131,6 +135,21 @@ public let reminderCreationReducer = Reducer<ReminderCreationState, ReminderCrea
     }
     
     state.reminders.append(reminder)
+
+    state.name = String()
+    state.dateFrequency = DateFrequency.daily
+    state.selectedWeekDays = Array()
+    state.selectedMonthDays = Array()
+    state.timeFrequency = TimeFrequency.morning
+    state.showingBanner = true
+    
+    return .run { send in
+      try await environment.mainQueue.sleep(for: .seconds(1))
+      await send(.removeBanner)
+    }
+    
+  case .removeBanner:
+    state.showingBanner = false
     return .none
   }
 }

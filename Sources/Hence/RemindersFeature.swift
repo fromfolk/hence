@@ -3,6 +3,7 @@ import ComposableArchitecture
 
 public struct RemindersState: Equatable {
   var reminders: [Reminder]
+  var isSheetPresented: Bool { self.reminderCreation != nil }
   
   private var internalCreationState: ReminderCreationState? = nil
     
@@ -17,8 +18,6 @@ public struct RemindersState: Equatable {
       self.reminders = value.reminders
     }
   }
-  
-  var isSheetPresented: Bool { self.reminderCreation != nil }
   
   public init(reminders: [Reminder] = Array()) {
     self.reminders = reminders

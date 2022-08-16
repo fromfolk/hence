@@ -41,7 +41,7 @@ let appReducer = Reducer<RemindersState, RemindersAction, RemindersEnvironment>.
     .pullback(
       state: \RemindersState.reminderCreation,
       action: /RemindersAction.reminderCreation,
-      environment: { _ in ReminderCreationEnvironment(uuid: UUID.init)}
+      environment: { _ in ReminderCreationEnvironment(uuid: UUID.init, mainQueue: .main)}
     )
 )
 
