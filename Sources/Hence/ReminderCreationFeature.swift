@@ -1,27 +1,6 @@
 
-import SwiftDate
 import ComposableArchitecture
-
-public struct Reminder: Identifiable, Equatable {
-  public let id: UUID
-  let name: String
-  let recurring: Recurring
-  
-  var subheading: String {
-    switch recurring {
-    case .daily(let at):
-      return "Daily : \(at.string)"
-    case .weekly(let on, let at):
-      return "Weekly : \(on.map { $0.name(style: .short) }.joined(separator: ", ")) : \(at.string)"
-    case .monthly(let on, let at):
-      return "Monthly : \(on.description) : \(at.string)"
-    }
-  }
-  
-  public static func == (lhs: Reminder, rhs: Reminder) -> Bool {
-    lhs.id == rhs.id
-  }
-}
+import SwiftDate
 
 public enum DateFrequency: String, CaseIterable {
   case daily = "Day"
@@ -36,7 +15,7 @@ public enum TimeFrequency: String, CaseIterable {
 }
 
 public struct ReminderCreationState: Equatable {
-  var reminders: [Reminder]
+  var reminders: IdentifiedArrayOf<Reminder>
   
   var name = String()
   var dateFrequency = DateFrequency.daily
@@ -49,7 +28,7 @@ public struct ReminderCreationState: Equatable {
     name.isEmpty || (dateFrequency == .weekly && selectedWeekDays.isEmpty) || (dateFrequency == .monthly && selectedMonthDays.isEmpty)
   }
   
-  public init(reminders: [Reminder] = Array()) {
+  public init(reminders: IdentifiedArrayOf<Reminder> = []) {
     self.reminders = reminders
   }
 }

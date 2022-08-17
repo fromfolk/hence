@@ -4,15 +4,17 @@ import SwiftUI
 
 public struct RemindersList: View {
   let store: Store<RemindersState, RemindersAction>
-  
+    
   public var body: some View {
     WithViewStore(store) { viewStore in
-      List(viewStore.reminders) { reminder in
-        VStack(alignment: .leading) {
-          Text(reminder.name)
-          Text(reminder.subheading)
-            .foregroundColor(.secondary)
-            .font(.subheadline)
+      List {
+        ForEachStore(
+          store.scope(
+            state: \.reminders,
+            action: RemindersAction.reminder(id:action:)
+          )
+        ) { forEachStore in
+          ReminderRow(store: forEachStore)
         }
       }
       .navigationTitle("Reminders")
@@ -69,7 +71,8 @@ struct RemindersList_Previews: PreviewProvider {
                 recurring: .weekly(
                   on: [
                     .monday,
-                    .wednesday, .friday
+                    .wednesday,
+                    .friday
                   ],
                   at: .afternoon
                 )
