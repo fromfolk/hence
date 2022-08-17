@@ -1,9 +1,14 @@
 
 import ComposableArchitecture
+import SwiftUI
 
 public struct RemindersState: Equatable {
   public var reminders: IdentifiedArrayOf<Reminder>
   public var isSheetPresented: Bool { self.reminderCreation != nil }
+  public var editMode: EditMode = .inactive
+  public var noReminders: Bool {
+    reminders.isEmpty
+  }
   
   private var internalCreationState: ReminderCreationState? = nil
   
@@ -28,6 +33,8 @@ public enum RemindersAction {
   case addReminder
   case setSheet(isPresented: Bool)
   case reminderCreation(ReminderCreationAction)
+  case editModeChanged(EditMode)
+  case deleteReminders(IndexSet)
   
   case reminder(id: Reminder.ID, action: ReminderAction)
 }
@@ -54,6 +61,17 @@ public let remindersReducer = Reducer<RemindersState, RemindersAction, Reminders
     return .none
     
   case .reminder:
+    return .none
+    
+  case let .editModeChanged(editMode):
+    state.editMode = editMode
+    return .none
+    
+  case let .deleteReminders(indexSet):
+    state.reminders.remove(atOffsets: indexSet)
+    if state.reminders.isEmpty {
+      state.editMode = .inactive
+    }
     return .none
   }
 }

@@ -12,9 +12,11 @@ public struct RemindersList: View {
           store.scope(
             state: \.reminders,
             action: RemindersAction.reminder(id:action:)
-          )
-        ) { forEachStore in
-          ReminderRow(store: forEachStore)
+          ),
+          content: ReminderRow.init
+        )
+        .onDelete { indexSet in
+          viewStore.send(.deleteReminders(indexSet))
         }
       }
       .navigationTitle("Reminders")
@@ -27,7 +29,19 @@ public struct RemindersList: View {
               .font(.title2)
           }
         }
+        ToolbarItem(placement: .automatic) {
+          EditButton()
+            .font(.title2)
+            .disabled(viewStore.noReminders)
+        }
       }
+      .environment(
+        \.editMode,
+         viewStore.binding(
+          get: \.editMode,
+          send: RemindersAction.editModeChanged
+         )
+      )
       .sheet(
         isPresented: viewStore.binding(
           get: \.isSheetPresented,
