@@ -22,13 +22,3 @@ public struct Reminder: Identifiable, Equatable {
   }
 }
 
-public enum ReminderAction {
-  case delete
-}
-
-public let reminderReducer = Reducer<Reminder, ReminderAction, ()> { state, action, _ in
-  switch action {
-  case .delete:
-    return .none
-  }
-}

@@ -3,16 +3,13 @@ import ComposableArchitecture
 import SwiftUI
 
 struct ReminderRow: View {
-  let store: Store<Reminder, ReminderAction>
-  
+  let reminder: Reminder
   var body: some View {
-    WithViewStore(store) { viewStore in
-      VStack(alignment: .leading) {
-        Text(viewStore.name)
-        Text(viewStore.subheading)
-          .foregroundColor(.secondary)
-          .font(.subheadline)
-      }
+    VStack(alignment: .leading) {
+      Text(reminder.name)
+      Text(reminder.subheading)
+        .foregroundColor(.secondary)
+        .font(.subheadline)
     }
   }
 }
@@ -20,11 +17,7 @@ struct ReminderRow: View {
 struct ReminderRow_Previews: PreviewProvider {
   static var previews: some View {
     ReminderRow(
-      store: Store(
-        initialState: Reminder(id: UUID(), name: "Hello", recurring: .daily(at: .morning)),
-        reducer: reminderReducer,
-        environment: ()
-      )
+      reminder: Reminder(id: UUID(), name: "Hello", recurring: .daily(at: .morning))
     )
   }
 }

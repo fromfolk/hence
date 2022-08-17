@@ -30,23 +30,29 @@ public struct RemindersState: Equatable {
 }
 
 public enum RemindersAction {
-  case addReminder
-  case setSheet(isPresented: Bool)
-  case reminderCreation(ReminderCreationAction)
   case editModeChanged(EditMode)
+  case addReminder
   case deleteReminders(IndexSet)
+  case setSheet(isPresented: Bool)
   
-  case reminder(id: Reminder.ID, action: ReminderAction)
+  case reminderCreation(ReminderCreationAction)
 }
 
-public struct RemindersEnvironment {
-  public init() {}
-}
-
-public let remindersReducer = Reducer<RemindersState, RemindersAction, RemindersEnvironment> { state, action, environment in
+public let remindersReducer = Reducer<RemindersState, RemindersAction, ()> { state, action, _ in
   switch action {
+  case let .editModeChanged(editMode):
+    state.editMode = editMode
+    return .none
+    
   case .addReminder:
     state.reminderCreation = ReminderCreationState(reminders: state.reminders)
+    return .none
+    
+  case let .deleteReminders(indexSet):
+    state.reminders.remove(atOffsets: indexSet)
+    if state.reminders.isEmpty {
+      state.editMode = .inactive
+    }
     return .none
     
   case .setSheet(isPresented: true):
@@ -59,26 +65,5 @@ public let remindersReducer = Reducer<RemindersState, RemindersAction, Reminders
     
   case .reminderCreation:
     return .none
-    
-  case .reminder:
-    return .none
-    
-  case let .editModeChanged(editMode):
-    state.editMode = editMode
-    return .none
-    
-  case let .deleteReminders(indexSet):
-    state.reminders.remove(atOffsets: indexSet)
-    if state.reminders.isEmpty {
-      state.editMode = .inactive
-    }
-    return .none
   }
 }
-.combined(
-  with: reminderReducer.forEach(
-    state: \RemindersState.reminders,
-    action: /RemindersAction.reminder(id:action:),
-    environment: { _ in () }
-  )
-)

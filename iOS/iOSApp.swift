@@ -3,7 +3,7 @@ import ComposableArchitecture
 import Hence
 import SwiftUI
 
-let appReducer = Reducer<RemindersState, RemindersAction, RemindersEnvironment>.combine(
+let appReducer = Reducer<RemindersState, RemindersAction, ()>.combine(
   remindersReducer,
   reminderCreationReducer
     .optional()
@@ -17,7 +17,7 @@ let appReducer = Reducer<RemindersState, RemindersAction, RemindersEnvironment>.
 let store = Store(
   initialState: RemindersState(),
   reducer: appReducer.debug(),
-  environment: RemindersEnvironment()
+  environment: ()
 )
 
 @main

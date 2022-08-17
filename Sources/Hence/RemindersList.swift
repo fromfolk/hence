@@ -4,17 +4,13 @@ import SwiftUI
 
 public struct RemindersList: View {
   let store: Store<RemindersState, RemindersAction>
-    
+  
   public var body: some View {
     WithViewStore(store) { viewStore in
       List {
-        ForEachStore(
-          store.scope(
-            state: \.reminders,
-            action: RemindersAction.reminder(id:action:)
-          ),
-          content: ReminderRow.init
-        )
+        ForEach(viewStore.reminders) { reminder in
+          ReminderRow(reminder: reminder)
+        }
         .onDelete { indexSet in
           viewStore.send(.deleteReminders(indexSet))
         }
@@ -99,7 +95,7 @@ struct RemindersList_Previews: PreviewProvider {
             ]
           ),
           reducer: remindersReducer,
-          environment: RemindersEnvironment()
+          environment: ()
         )
       )
     }
