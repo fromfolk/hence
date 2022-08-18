@@ -1,13 +1,14 @@
 
 import ComposableArchitecture
+import Hence
 
 public struct Reminder: Identifiable, Equatable {
   public let id: UUID
-  let name: String
-  let image: String
-  let recurring: Recurring
+  public let name: String
+  public let image: String
+  public let recurring: Recurring
   
-  var subheading: String {
+  public var subheading: String {
     switch recurring {
     case .daily(let at):
       return "Daily : \(at.string)"
@@ -16,6 +17,13 @@ public struct Reminder: Identifiable, Equatable {
     case .monthly(let on, let at):
       return "Monthly : \(on.description) : \(at.string)"
     }
+  }
+  
+  public init(id: UUID, name: String, image: String, recurring: Recurring) {
+    self.id = id
+    self.name = name
+    self.image = image
+    self.recurring = recurring
   }
   
   public static func == (lhs: Reminder, rhs: Reminder) -> Bool {

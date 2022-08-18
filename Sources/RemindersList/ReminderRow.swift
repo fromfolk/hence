@@ -1,5 +1,5 @@
 
-import ComposableArchitecture
+import Reminder
 import SwiftUI
 
 struct ReminderRow: View {

@@ -1,5 +1,6 @@
 
 import ComposableArchitecture
+import Reminder
 import SwiftUI
 
 public struct RemindersState: Equatable {

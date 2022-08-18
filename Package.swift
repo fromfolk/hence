@@ -12,6 +12,14 @@ let package = Package(
     .library(
       name: "Hence",
       targets: ["Hence"]
+    ),
+    .library(
+      name: "Reminder",
+      targets: ["Reminder"]
+    ),
+    .library(
+      name: "RemindersList",
+      targets: ["RemindersList"]
     )
   ],
   dependencies: [
@@ -24,6 +32,23 @@ let package = Package(
       dependencies: [
         .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
         .product(name: "SwiftDate", package: "SwiftDate")
+      ]
+    ),
+    .target(
+      name: "Reminder",
+      dependencies: [
+        .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
+        .product(name: "SwiftDate", package: "SwiftDate"),
+        "Hence"
+      ]
+    ),
+    .target(
+      name: "RemindersList",
+      dependencies: [
+        .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
+        .product(name: "SwiftDate", package: "SwiftDate"),
+        "Hence",
+        "Reminder"
       ]
     ),
     .testTarget(

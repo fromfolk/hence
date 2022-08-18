@@ -1,5 +1,6 @@
 
 import ComposableArchitecture
+import Hence
 import SwiftDate
 
 public enum DateFrequency: String, CaseIterable {
@@ -15,7 +16,7 @@ public enum TimeFrequency: String, CaseIterable {
 }
 
 public struct ReminderCreationState: Equatable {
-  var reminders: IdentifiedArrayOf<Reminder>
+  public var reminders: IdentifiedArrayOf<Reminder>
   
   var name = String()
   var image = "circle"
