@@ -4,6 +4,7 @@ import ComposableArchitecture
 public struct Reminder: Identifiable, Equatable {
   public let id: UUID
   let name: String
+  let image: String
   let recurring: Recurring
   
   var subheading: String {

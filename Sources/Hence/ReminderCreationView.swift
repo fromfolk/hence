@@ -17,6 +17,13 @@ public struct ReminderCreationView: View {
                 send: ReminderCreationAction.editName
               )
             )
+            NavigationLink(destination: ImageSelection(store: store)) {
+              HStack {
+                Text("Image")
+                Spacer()
+                Image(systemName: viewStore.image)
+              }
+            }
           }
           
           Section {

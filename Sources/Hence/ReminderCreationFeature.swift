@@ -18,6 +18,7 @@ public struct ReminderCreationState: Equatable {
   var reminders: IdentifiedArrayOf<Reminder>
   
   var name = String()
+  var image = "circle"
   var dateFrequency = DateFrequency.daily
   var selectedWeekDays: [WeekDay] = Array()
   var selectedMonthDays: [Int] = Array()
@@ -36,6 +37,7 @@ public struct ReminderCreationState: Equatable {
 public enum ReminderCreationAction {
   case editName(String)
   case dateFrequencyChanged(DateFrequency)
+  case selectedImageChanged(String)
   case selectedWeekDaysChanged(WeekDay)
   case selectedMonthDaysChanged(Int)
   case timeFrequencyChanged(TimeFrequency)
@@ -63,6 +65,10 @@ public let reminderCreationReducer = Reducer<ReminderCreationState, ReminderCrea
     
   case .dateFrequencyChanged(let update):
     state.dateFrequency = update
+    return .none
+    
+  case .selectedImageChanged(let update):
+    state.image = update
     return .none
     
   case .selectedWeekDaysChanged(let update):
@@ -95,6 +101,7 @@ public let reminderCreationReducer = Reducer<ReminderCreationState, ReminderCrea
       reminder = Reminder(
         id: environment.uuid(),
         name: state.name,
+        image: state.image,
         recurring: .daily(at: .init(state.timeFrequency))
       )
       
@@ -102,6 +109,7 @@ public let reminderCreationReducer = Reducer<ReminderCreationState, ReminderCrea
       reminder = Reminder(
         id: environment.uuid(),
         name: state.name,
+        image: state.image,
         recurring: .weekly(on: state.selectedWeekDays, at: .init(state.timeFrequency))
       )
       
@@ -109,6 +117,7 @@ public let reminderCreationReducer = Reducer<ReminderCreationState, ReminderCrea
       reminder = Reminder(
         id: environment.uuid(),
         name: state.name,
+        image: state.image,
         recurring: .monthly(on: state.selectedMonthDays, at: .init(state.timeFrequency))
       )
     }
@@ -116,6 +125,7 @@ public let reminderCreationReducer = Reducer<ReminderCreationState, ReminderCrea
     state.reminders.append(reminder)
 
     state.name = String()
+    state.image = "circle"
     state.dateFrequency = DateFrequency.daily
     state.selectedWeekDays = Array()
     state.selectedMonthDays = Array()

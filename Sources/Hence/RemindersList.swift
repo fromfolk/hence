@@ -14,20 +14,18 @@ public struct RemindersList: View {
         .onDelete { indexSet in
           viewStore.send(.deleteReminders(indexSet))
         }
+        .listRowSeparator(.hidden)
       }
       .navigationTitle("Reminders")
       .navigationBarTitleDisplayMode(.large)
-      .listStyle(.grouped)
       .toolbar {
         ToolbarItem {
           Button(action: { viewStore.send(.addReminder) }) {
             Image(systemName: "plus")
-              .font(.title2)
           }
         }
         ToolbarItem(placement: .automatic) {
           EditButton()
-            .font(.title2)
             .disabled(viewStore.noReminders)
         }
       }
@@ -68,32 +66,7 @@ struct RemindersList_Previews: PreviewProvider {
     NavigationView {
       RemindersList(
         store: Store(
-          initialState: RemindersState(
-            reminders: [
-              Reminder(
-                id: UUID(),
-                name: "Brush teeth",
-                recurring: .daily(at: .morning)
-              ),
-              Reminder(
-                id: UUID(),
-                name: "Work out",
-                recurring: .weekly(
-                  on: [
-                    .monday,
-                    .wednesday,
-                    .friday
-                  ],
-                  at: .afternoon
-                )
-              ),
-              Reminder(
-                id: UUID(),
-                name: "Meditate",
-                recurring: .daily(at: .evening)
-              )
-            ]
-          ),
+          initialState: RemindersState(reminders: remindersPreviewData),
           reducer: remindersReducer,
           environment: ()
         )
@@ -101,3 +74,31 @@ struct RemindersList_Previews: PreviewProvider {
     }
   }
 }
+
+let remindersPreviewData: IdentifiedArrayOf<Reminder> = [
+  Reminder(
+    id: UUID(),
+    name: "Brush teeth",
+    image: "heart",
+    recurring: .daily(at: .morning)
+  ),
+  Reminder(
+    id: UUID(),
+    name: "Work out",
+    image: "cross",
+    recurring: .weekly(
+      on: [
+        .monday,
+        .wednesday,
+        .friday
+      ],
+      at: .afternoon
+    )
+  ),
+  Reminder(
+    id: UUID(),
+    name: "Meditate",
+    image: "brain.head.profile",
+    recurring: .daily(at: .evening)
+  )
+]
