@@ -3,7 +3,40 @@ import Hence
 import XCTest
 
 final class RecurringTests: XCTestCase {
-  func testDailyRecurrence_atMorning() {
+  func testDailyRecurrence_atMorning_beforeTodaysOccurence() {
+    let recurring = Recurring.daily(at: .morning)
+    
+    let startDate = Date(year: 2021, month: 11, day: 29, hour: 4, minute: 24)
+    let expectedDate = Date(year: 2021, month: 11, day: 29, hour: 6, minute: 0)
+
+    let calculatedDate = try! recurring.nextOccurence(after: startDate)
+    
+    XCTAssertEqual(calculatedDate, expectedDate)
+  }
+  
+  func testDailyRecurrence_atAfternoon_beforeTodaysOccurence() {
+    let recurring = Recurring.daily(at: .afternoon)
+    
+    let startDate = Date(year: 2021, month: 11, day: 29, hour: 11, minute: 24)
+    let expectedDate = Date(year: 2021, month: 11, day: 29, hour: 12, minute: 0)
+
+    let calculatedDate = try! recurring.nextOccurence(after: startDate)
+    
+    XCTAssertEqual(calculatedDate, expectedDate)
+  }
+  
+  func testDailyRecurrence_atEvening_beforeTodaysOccurence() {
+    let recurring = Recurring.daily(at: .evening)
+    
+    let startDate = Date(year: 2021, month: 11, day: 29, hour: 12, minute: 24)
+    let expectedDate = Date(year: 2021, month: 11, day: 29, hour: 18, minute: 0)
+
+    let calculatedDate = try! recurring.nextOccurence(after: startDate)
+    
+    XCTAssertEqual(calculatedDate, expectedDate)
+  }
+  
+  func testDailyRecurrence_atMorning_afterTodaysOccurence() {
     let recurring = Recurring.daily(at: .morning)
     
     let startDate = Date(year: 2021, month: 11, day: 29, hour: 15, minute: 24)
@@ -14,7 +47,7 @@ final class RecurringTests: XCTestCase {
     XCTAssertEqual(calculatedDate, expectedDate)
   }
   
-  func testDailyRecurrence_atAfternoon() {
+  func testDailyRecurrence_atAfternoon_afterTodaysOccurence() {
     let recurring = Recurring.daily(at: .afternoon)
     
     let startDate = Date(year: 2021, month: 11, day: 29, hour: 15, minute: 24)
@@ -25,10 +58,10 @@ final class RecurringTests: XCTestCase {
     XCTAssertEqual(calculatedDate, expectedDate)
   }
   
-  func testDailyRecurrence_atEvening() {
+  func testDailyRecurrence_atEvening_afterTodaysOccurence() {
     let recurring = Recurring.daily(at: .evening)
     
-    let startDate = Date(year: 2021, month: 11, day: 29, hour: 15, minute: 24)
+    let startDate = Date(year: 2021, month: 11, day: 29, hour: 18, minute: 24)
     let expectedDate = Date(year: 2021, month: 11, day: 30, hour: 18, minute: 0)
 
     let calculatedDate = try! recurring.nextOccurence(after: startDate)

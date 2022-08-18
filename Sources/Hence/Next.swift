@@ -10,10 +10,16 @@ fileprivate enum DateCalculationError: Error {
 }
 
 public extension Recurring {
-  func nextOccurence(after today: Date) throws -> Date {
+  func nextOccurence(after now: Date) throws -> Date {
     switch self {
     case let .daily(time):
-      let tomorrowMidnightInterval = today.dateAt(.tomorrowAtStart).timeIntervalSinceReferenceDate
+      let absoluteTime = now.dateAt(.startOfDay).timeIntervalSinceReferenceDate + time.interval
+      
+      if absoluteTime > now.timeIntervalSinceReferenceDate {
+        return Date(timeIntervalSinceReferenceDate: absoluteTime)
+      }
+    
+      let tomorrowMidnightInterval = now.dateAt(.tomorrowAtStart).timeIntervalSinceReferenceDate
       let tomorrowTimeOfDayInterval = time.interval
       
       return Date(timeIntervalSinceReferenceDate: tomorrowMidnightInterval + tomorrowTimeOfDayInterval)
@@ -24,24 +30,24 @@ public extension Recurring {
         .sorted(by: <)
           
       let ordinalDifference = try numberOfDaysBetween(
-        todaysOrdinal: today.weekday,
+        todaysOrdinal: now.weekday,
         andNextIn: sortedDays,
         cap: daysInWeek
       )
       
-      return dateAfter(days: ordinalDifference, and: time, given: today)
+      return dateAfter(days: ordinalDifference, and: time, given: now)
 
     case let .monthly(days, time):
       let sortedDays = days
         .sorted(by: <)
           
       let ordinalDifference = try numberOfDaysBetween(
-        todaysOrdinal: today.dateComponents.day!,
+        todaysOrdinal: now.dateComponents.day!,
         andNextIn: sortedDays,
-        cap: today.monthDays
+        cap: now.monthDays
       )
       
-      return dateAfter(days: ordinalDifference, and: time, given: today)
+      return dateAfter(days: ordinalDifference, and: time, given: now)
     }
   }
 }
