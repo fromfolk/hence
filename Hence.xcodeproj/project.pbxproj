@@ -13,6 +13,7 @@
 		2B1064DC28A3CA0100C36230 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2B1064DB28A3CA0100C36230 /* Preview Assets.xcassets */; };
 		2B57F6D428AE677D003B5DF1 /* Reminder in Frameworks */ = {isa = PBXBuildFile; productRef = 2B57F6D328AE677D003B5DF1 /* Reminder */; };
 		2B57F6D628AE677D003B5DF1 /* RemindersList in Frameworks */ = {isa = PBXBuildFile; productRef = 2B57F6D528AE677D003B5DF1 /* RemindersList */; };
+		2B57F6D828AED149003B5DF1 /* Today in Frameworks */ = {isa = PBXBuildFile; productRef = 2B57F6D728AED149003B5DF1 /* Today */; };
 		2BC9BDAC28A3CF49002C6CE8 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 2BC9BDAB28A3CF49002C6CE8 /* ComposableArchitecture */; };
 /* End PBXBuildFile section */
 
@@ -29,6 +30,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2BC9BDAC28A3CF49002C6CE8 /* ComposableArchitecture in Frameworks */,
+				2B57F6D828AED149003B5DF1 /* Today in Frameworks */,
 				2B0C954628A3CC840098BC1C /* Hence in Frameworks */,
 				2B57F6D628AE677D003B5DF1 /* RemindersList in Frameworks */,
 				2B57F6D428AE677D003B5DF1 /* Reminder in Frameworks */,
@@ -101,6 +103,7 @@
 				2BC9BDAB28A3CF49002C6CE8 /* ComposableArchitecture */,
 				2B57F6D328AE677D003B5DF1 /* Reminder */,
 				2B57F6D528AE677D003B5DF1 /* RemindersList */,
+				2B57F6D728AED149003B5DF1 /* Today */,
 			);
 			productName = iOS;
 			productReference = 2B1064D228A3CA0100C36230 /* iOS.app */;
@@ -388,6 +391,10 @@
 		2B57F6D528AE677D003B5DF1 /* RemindersList */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = RemindersList;
+		};
+		2B57F6D728AED149003B5DF1 /* Today */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Today;
 		};
 		2BC9BDAB28A3CF49002C6CE8 /* ComposableArchitecture */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -4,13 +4,23 @@ import Hence
 import Reminder
 import RemindersList
 import SwiftUI
+import Today
 
 struct AppState {
   var remindersState = RemindersState()
+  var todayState: TodayState {
+    get {
+      TodayState(reminders: remindersState.reminders)
+    }
+    set {
+      remindersState.reminders = newValue.reminders
+    }
+  }
 }
 
 enum AppAction {
   case reminders(RemindersAction)
+  case today(TodayAction)
 }
 
 struct AppEnvironment {
@@ -26,12 +36,16 @@ struct AppEnvironment {
 }
 
 let appReducer = Reducer<AppState, AppAction, AppEnvironment>.combine(
-  remindersReducer
-    .pullback(
-      state: \.remindersState,
-      action: /AppAction.reminders,
-      environment: { _ in () }
-    )
+  remindersReducer.pullback(
+    state: \.remindersState,
+    action: /AppAction.reminders,
+    environment: { _ in () }
+  ),
+  todayReducer.pullback(
+    state: \.todayState,
+    action: /AppAction.today,
+    environment: { _ in () }
+  )
 )
 
 let store = Store(
@@ -44,13 +58,36 @@ let store = Store(
 struct iOSApp: App {
   var body: some Scene {
     WindowGroup {
-      NavigationView {
-        RemindersList(
-          store: store.scope(
-            state: \.remindersState,
-            action: AppAction.reminders
+      TabView {
+        NavigationView {
+          RemindersList(
+            store: store.scope(
+              state: \.remindersState,
+              action: AppAction.reminders
+            )
           )
-        )
+        }
+        .tabItem {
+          VStack {
+            Image(systemName: "list.bullet")
+            Text("Reminders")
+          }
+        }
+        
+        NavigationView {
+          TodayView(
+            store: store.scope(
+              state: \.todayState,
+              action: AppAction.today
+            )
+          )
+        }
+        .tabItem {
+          VStack {
+            Image(systemName: "checklist")
+            Text("Today")
+          }
+        }
       }
     }
   }

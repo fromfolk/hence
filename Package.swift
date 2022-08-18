@@ -9,18 +9,10 @@ let package = Package(
     .iOS(.v16)
   ],
   products: [
-    .library(
-      name: "Hence",
-      targets: ["Hence"]
-    ),
-    .library(
-      name: "Reminder",
-      targets: ["Reminder"]
-    ),
-    .library(
-      name: "RemindersList",
-      targets: ["RemindersList"]
-    )
+    .library(name: "Hence", targets: ["Hence"]),
+    .library(name: "Reminder", targets: ["Reminder"]),
+    .library(name: "RemindersList", targets: ["RemindersList"]),
+    .library(name: "Today", targets: ["Today"])
   ],
   dependencies: [
     .package(url: "https://github.com/pointfreeco/swift-composable-architecture.git", from: "0.39.0"),
@@ -48,6 +40,13 @@ let package = Package(
         .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
         .product(name: "SwiftDate", package: "SwiftDate"),
         "Hence",
+        "Reminder"
+      ]
+    ),
+    .target(
+      name: "Today",
+      dependencies: [
+        .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
         "Reminder"
       ]
     ),
