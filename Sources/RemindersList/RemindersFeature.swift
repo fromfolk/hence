@@ -68,3 +68,12 @@ public let remindersReducer = Reducer<RemindersState, RemindersAction, ()> { sta
     return .none
   }
 }
+.combined(
+  with: reminderCreationReducer
+    .optional()
+    .pullback(
+      state: \RemindersState.reminderCreation,
+      action: /RemindersAction.reminderCreation,
+      environment: { _ in ReminderCreationEnvironment(uuid: UUID.init, mainQueue: .main)}
+    )
+)

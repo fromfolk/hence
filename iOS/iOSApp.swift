@@ -5,21 +5,39 @@ import Reminder
 import RemindersList
 import SwiftUI
 
-let appReducer = Reducer<RemindersState, RemindersAction, ()>.combine(
-  remindersReducer,
-  reminderCreationReducer
-    .optional()
+struct AppState {
+  var remindersState = RemindersState()
+}
+
+enum AppAction {
+  case reminders(RemindersAction)
+}
+
+struct AppEnvironment {
+  let uuid: () -> UUID
+  let mainQueue: AnySchedulerOf<DispatchQueue>
+  
+  public init(uuid: @escaping () -> UUID, mainQueue: AnySchedulerOf<DispatchQueue>) {
+    self.uuid = uuid
+    self.mainQueue = mainQueue
+  }
+  
+  static var live = AppEnvironment(uuid: UUID.init, mainQueue: .main)
+}
+
+let appReducer = Reducer<AppState, AppAction, AppEnvironment>.combine(
+  remindersReducer
     .pullback(
-      state: \RemindersState.reminderCreation,
-      action: /RemindersAction.reminderCreation,
-      environment: { _ in ReminderCreationEnvironment(uuid: UUID.init, mainQueue: .main)}
+      state: \.remindersState,
+      action: /AppAction.reminders,
+      environment: { _ in () }
     )
 )
 
 let store = Store(
-  initialState: RemindersState(),
+  initialState: AppState(),
   reducer: appReducer.debug(),
-  environment: ()
+  environment: .live
 )
 
 @main
@@ -27,7 +45,12 @@ struct iOSApp: App {
   var body: some Scene {
     WindowGroup {
       NavigationView {
-        RemindersList(store: store)
+        RemindersList(
+          store: store.scope(
+            state: \.remindersState,
+            action: AppAction.reminders
+          )
+        )
       }
     }
   }
