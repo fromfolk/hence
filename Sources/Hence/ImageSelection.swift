@@ -19,7 +19,9 @@ struct ImageSelection: View {
       "brain.head.profile"
     ],
     [
-      "pc", "laptopcomputer", "iphone"
+      "pc",
+      "laptopcomputer",
+      "iphone"
     ]
   ]
   

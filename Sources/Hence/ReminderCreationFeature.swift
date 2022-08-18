@@ -29,6 +29,18 @@ public struct ReminderCreationState: Equatable {
     name.isEmpty || (dateFrequency == .weekly && selectedWeekDays.isEmpty) || (dateFrequency == .monthly && selectedMonthDays.isEmpty)
   }
   
+  var concatenatedSelectedWeekDays: String {
+    selectedWeekDays
+      .map { $0.name(style: .short) }
+      .joined(separator: ", ")
+  }
+  
+  var concatenatedSelectedMonthDays: String {
+    selectedMonthDays
+      .map(String.init)
+      .joined(separator: ", ")
+  }
+  
   public init(reminders: IdentifiedArrayOf<Reminder> = []) {
     self.reminders = reminders
   }
@@ -123,7 +135,7 @@ public let reminderCreationReducer = Reducer<ReminderCreationState, ReminderCrea
     }
     
     state.reminders.append(reminder)
-
+    
     state.name = String()
     state.image = "circle"
     state.dateFrequency = DateFrequency.daily

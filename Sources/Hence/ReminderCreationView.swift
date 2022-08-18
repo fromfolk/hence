@@ -38,13 +38,8 @@ public struct ReminderCreationView: View {
                 HStack {
                   Text("On")
                   Spacer()
-                  Text(
-                    viewStore
-                      .selectedWeekDays
-                      .map { $0.name(style: .short) }
-                      .joined(separator: ", ")
-                  )
-                  .foregroundColor(.secondary)
+                  Text(viewStore.concatenatedSelectedWeekDays)
+                    .foregroundColor(.secondary)
                 }
               }
               
@@ -53,13 +48,8 @@ public struct ReminderCreationView: View {
                 HStack {
                   Text("On")
                   Spacer()
-                  Text(
-                    viewStore
-                      .selectedMonthDays
-                      .map(String.init)
-                      .joined(separator: ", ")
-                  )
-                  .foregroundColor(.secondary)
+                  Text(viewStore.concatenatedSelectedMonthDays)
+                    .foregroundColor(.secondary)
                 }
               }
             }
@@ -83,7 +73,7 @@ public struct ReminderCreationView: View {
             .padding()
             .background(Color.pink)
             .cornerRadius(10)
-          .shadow(radius: 5)
+            .shadow(radius: 5)
         }
       }
     }
