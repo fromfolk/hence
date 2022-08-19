@@ -10,6 +10,21 @@ fileprivate enum DateCalculationError: Error {
 }
 
 public extension Recurring {
+  func isToday(_ today: Date) -> Bool {
+    switch self {
+    case .daily:
+      return true
+      
+    case let .weekly(on: days, _):
+      guard let weekDay = WeekDay(rawValue: today.weekday) else { return false }
+      return days.contains(weekDay)
+      
+    case let .monthly(on: days, _):
+      guard let monthDay = today.dateComponents.day else { return false }
+      return days.contains(monthDay)
+    }
+  }
+  
   func nextOccurence(after now: Date) throws -> Date {
     switch self {
     case let .daily(time):
