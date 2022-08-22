@@ -6,6 +6,7 @@ import SwiftUI
 public struct RemindersState: Equatable {
   public var reminders: IdentifiedArrayOf<Reminder>
   public var todaysReminders: IdentifiedArrayOf<Reminder> = []
+  public var otherReminders: IdentifiedArrayOf<Reminder> = []
   public var isSheetPresented: Bool { self.reminderCreation != nil }
   public var editMode: EditMode = .inactive
   public var noReminders: Bool {
@@ -78,15 +79,20 @@ public let remindersReducer = Reducer<RemindersState, RemindersAction, Reminders
     
   case .setSheet(isPresented: false):
     state.reminderCreation = nil
-    state.todaysReminders = state.reminders.filter { $0.recurring.isToday(environment.date()) }
+    sortReminders()
     return .none
     
   case .reminderCreation:
     return .none
     
   case .onAppear:
-    state.todaysReminders = state.reminders.filter { $0.recurring.isToday(environment.date()) }
+    sortReminders()
     return .none
+  }
+  
+  func sortReminders() {
+    state.todaysReminders = state.reminders.filter { $0.recurring.isToday(environment.date()) }
+    state.otherReminders = state.reminders.filter { !state.todaysReminders.contains($0) }
   }
 }
 .combined(

@@ -10,10 +10,14 @@ struct AppState {
   var remindersState = RemindersState()
   var todayState: TodayState {
     get {
-      TodayState(reminders: remindersState.todaysReminders)
+      TodayState(
+        dueReminders: remindersState.todaysReminders,
+        laterReminders: remindersState.otherReminders
+      )
     }
     set {
-      remindersState.todaysReminders = newValue.reminders
+      remindersState.todaysReminders = newValue.dueReminders
+      remindersState.otherReminders = newValue.laterReminders
     }
   }
 }

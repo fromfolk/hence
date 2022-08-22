@@ -3,10 +3,15 @@ import ComposableArchitecture
 import Reminder
 
 public struct TodayState: Equatable {
-  public var reminders: IdentifiedArrayOf<Reminder>
+  public var dueReminders: IdentifiedArrayOf<Reminder>
+  public var laterReminders: IdentifiedArrayOf<Reminder>
     
-  public init(reminders: IdentifiedArrayOf<Reminder> = []) {
-    self.reminders = reminders
+  public init(
+    dueReminders: IdentifiedArrayOf<Reminder> = [],
+    laterReminders: IdentifiedArrayOf<Reminder> = []
+  ) {
+    self.dueReminders = dueReminders
+    self.laterReminders = laterReminders
   }
 }
 
