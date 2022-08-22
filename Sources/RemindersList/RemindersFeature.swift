@@ -5,6 +5,7 @@ import SwiftUI
 
 public struct RemindersState: Equatable {
   public var reminders: IdentifiedArrayOf<Reminder>
+  public var todaysReminders: IdentifiedArrayOf<Reminder> = []
   public var isSheetPresented: Bool { self.reminderCreation != nil }
   public var editMode: EditMode = .inactive
   public var noReminders: Bool {
@@ -35,11 +36,26 @@ public enum RemindersAction {
   case addReminder
   case deleteReminders(IndexSet)
   case setSheet(isPresented: Bool)
+  case onAppear
   
   case reminderCreation(ReminderCreationAction)
 }
 
-public let remindersReducer = Reducer<RemindersState, RemindersAction, ()> { state, action, _ in
+public struct RemindersEnvironment {
+  let date: () -> Date
+  let uuid: () -> UUID
+  let mainQueue: AnySchedulerOf<DispatchQueue>
+  
+  public static var live = RemindersEnvironment(date: Date.init, uuid: UUID.init, mainQueue: .main)
+  
+  public init(date: @escaping () -> Date, uuid: @escaping () -> UUID, mainQueue: AnySchedulerOf<DispatchQueue>) {
+    self.date = date
+    self.uuid = uuid
+    self.mainQueue = mainQueue
+  }
+}
+
+public let remindersReducer = Reducer<RemindersState, RemindersAction, RemindersEnvironment> { state, action, environment in
   switch action {
   case let .editModeChanged(editMode):
     state.editMode = editMode
@@ -62,9 +78,14 @@ public let remindersReducer = Reducer<RemindersState, RemindersAction, ()> { sta
     
   case .setSheet(isPresented: false):
     state.reminderCreation = nil
+    state.todaysReminders = state.reminders.filter { $0.recurring.isToday(environment.date()) }
     return .none
     
   case .reminderCreation:
+    return .none
+    
+  case .onAppear:
+    state.todaysReminders = state.reminders.filter { $0.recurring.isToday(environment.date()) }
     return .none
   }
 }
@@ -74,6 +95,6 @@ public let remindersReducer = Reducer<RemindersState, RemindersAction, ()> { sta
     .pullback(
       state: \RemindersState.reminderCreation,
       action: /RemindersAction.reminderCreation,
-      environment: { _ in ReminderCreationEnvironment(uuid: UUID.init, mainQueue: .main)}
+      environment: { ReminderCreationEnvironment(uuid: $0.uuid, mainQueue: $0.mainQueue) }
     )
 )

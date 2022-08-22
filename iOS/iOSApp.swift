@@ -10,10 +10,10 @@ struct AppState {
   var remindersState = RemindersState()
   var todayState: TodayState {
     get {
-      TodayState(reminders: remindersState.reminders)
+      TodayState(reminders: remindersState.todaysReminders)
     }
     set {
-      remindersState.reminders = newValue.reminders
+      remindersState.todaysReminders = newValue.reminders
     }
   }
 }
@@ -24,29 +24,32 @@ enum AppAction {
 }
 
 struct AppEnvironment {
+  let date: () -> Date
   let uuid: () -> UUID
   let mainQueue: AnySchedulerOf<DispatchQueue>
   
-  public init(uuid: @escaping () -> UUID, mainQueue: AnySchedulerOf<DispatchQueue>) {
+  public init(date: @escaping () -> Date, uuid: @escaping () -> UUID, mainQueue: AnySchedulerOf<DispatchQueue>) {
+    self.date = date
     self.uuid = uuid
     self.mainQueue = mainQueue
   }
   
-  static var live = AppEnvironment(uuid: UUID.init, mainQueue: .main)
+  static var live = AppEnvironment(date: Date.init, uuid: UUID.init, mainQueue: .main)
 }
 
-let appReducer = Reducer<AppState, AppAction, AppEnvironment>.combine(
-  remindersReducer.pullback(
-    state: \.remindersState,
-    action: /AppAction.reminders,
-    environment: { _ in () }
-  ),
-  todayReducer.pullback(
-    state: \.todayState,
-    action: /AppAction.today,
-    environment: { _ in () }
+let appReducer = Reducer<AppState, AppAction, AppEnvironment>
+  .combine(
+    remindersReducer.pullback(
+      state: \.remindersState,
+      action: /AppAction.reminders,
+      environment: { RemindersEnvironment(date: $0.date, uuid: $0.uuid, mainQueue: $0.mainQueue) }
+    ),
+    todayReducer.pullback(
+      state: \.todayState,
+      action: /AppAction.today,
+      environment: { TodayEnvironment(date: $0.date) }
+    )
   )
-)
 
 let store = Store(
   initialState: AppState(),

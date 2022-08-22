@@ -69,7 +69,7 @@ struct RemindersList_Previews: PreviewProvider {
         store: Store(
           initialState: RemindersState(reminders: remindersPreviewData),
           reducer: remindersReducer,
-          environment: ()
+          environment: .live
         )
       )
     }

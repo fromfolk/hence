@@ -1,5 +1,6 @@
 
 import ComposableArchitecture
+import Reminder
 import SwiftUI
 
 public struct TodayView: View {
@@ -7,9 +8,11 @@ public struct TodayView: View {
   
   public var body: some View {
     WithViewStore(store) { viewStore in
-      VStack {
-        ForEach(viewStore.reminders) {
-          Text($0.name)
+      List {
+        ForEach(viewStore.reminders) { reminder in
+          HStack {
+            Text(reminder.name)
+          }
         }
       }
       .navigationTitle("Today")
@@ -26,11 +29,39 @@ struct TodayView_Previews: PreviewProvider {
     NavigationView {
       TodayView(
         store: Store(
-          initialState: TodayState(),
+          initialState: TodayState(reminders: remindersPreviewData),
           reducer: todayReducer,
-          environment: ()
+          environment: .live
         )
       )
     }
   }
 }
+
+let remindersPreviewData: IdentifiedArrayOf<Reminder> = [
+  Reminder(
+    id: UUID(),
+    name: "Brush teeth",
+    image: "heart",
+    recurring: .daily(at: .morning)
+  ),
+  Reminder(
+    id: UUID(),
+    name: "Work out",
+    image: "cross",
+    recurring: .weekly(
+      on: [
+        .monday,
+        .wednesday,
+        .friday
+      ],
+      at: .afternoon
+    )
+  ),
+  Reminder(
+    id: UUID(),
+    name: "Meditate",
+    image: "brain.head.profile",
+    recurring: .daily(at: .evening)
+  )
+]
