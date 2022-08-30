@@ -7,17 +7,31 @@ import SwiftUI
 import Today
 
 struct AppState {
-  var remindersState = RemindersState()
-  var todayState: TodayState {
+  var reminders: IdentifiedArrayOf<Reminder> = []
+  
+  var _remindersState = RemindersState()
+  var remindersState: RemindersState {
     get {
-      TodayState(
-        dueReminders: remindersState.todaysReminders,
-        laterReminders: remindersState.otherReminders
-      )
+      var state = _remindersState
+      state.reminders = self.reminders
+      return state
     }
     set {
-      remindersState.todaysReminders = newValue.dueReminders
-      remindersState.otherReminders = newValue.laterReminders
+      _remindersState = newValue
+      reminders = newValue.reminders
+    }
+  }
+  
+  var _todayState = TodayState()
+  var todayState: TodayState {
+    get {
+      var state = _todayState
+      state.reminders = self.reminders
+      return state
+    }
+    set {
+      _todayState = newValue
+      reminders = newValue.reminders
     }
   }
 }

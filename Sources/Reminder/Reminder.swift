@@ -1,5 +1,6 @@
 
 import ComposableArchitecture
+import Foundation
 import Hence
 
 public struct Reminder: Identifiable, Equatable {

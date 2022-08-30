@@ -28,6 +28,7 @@ public struct TodayView: View {
         }
       }
       .navigationTitle("Today")
+      .onAppear { viewStore.send(.onAppear) }
     }
   }
   
@@ -41,17 +42,7 @@ struct TodayView_Previews: PreviewProvider {
     NavigationView {
       TodayView(
         store: Store(
-          initialState: TodayState(
-            dueReminders: remindersPreviewData,
-            laterReminders: [
-              Reminder(
-                id: UUID(),
-                name: "Something later",
-                image: "brain",
-                recurring: .weekly(on: [.thursday], at: .morning)
-              )
-            ]
-          ),
+          initialState: TodayState(reminders: remindersPreviewData),
           reducer: todayReducer,
           environment: .live
         )

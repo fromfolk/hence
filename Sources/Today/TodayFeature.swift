@@ -1,22 +1,25 @@
 
 import ComposableArchitecture
+import Foundation
 import Reminder
 
 public struct TodayState: Equatable {
-  public var dueReminders: IdentifiedArrayOf<Reminder>
-  public var laterReminders: IdentifiedArrayOf<Reminder>
+  var dueReminders: IdentifiedArrayOf<Reminder> = []
+  var laterReminders: IdentifiedArrayOf<Reminder> = []
     
-  public init(
-    dueReminders: IdentifiedArrayOf<Reminder> = [],
-    laterReminders: IdentifiedArrayOf<Reminder> = []
-  ) {
-    self.dueReminders = dueReminders
-    self.laterReminders = laterReminders
+  public var reminders: IdentifiedArrayOf<Reminder>
+  
+  public init(reminders: IdentifiedArrayOf<Reminder> = []) {
+    self.reminders = reminders
+  }
+  
+  public init(_ newState: Self) {
+    self.reminders = newState.reminders
   }
 }
 
 public enum TodayAction {
-  case none
+  case onAppear
 }
 
 public struct TodayEnvironment {
@@ -31,7 +34,9 @@ public struct TodayEnvironment {
 
 public let todayReducer = Reducer<TodayState, TodayAction, TodayEnvironment> { state, action, environment in
   switch action {
-  case .none:
+  case .onAppear:
+    state.dueReminders = state.reminders.filter { $0.recurring.isToday(environment.date()) }
+    state.laterReminders = state.reminders.filter { !state.dueReminders.contains($0) }
     return .none
   }
 }

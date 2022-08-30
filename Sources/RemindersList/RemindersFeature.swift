@@ -5,8 +5,6 @@ import SwiftUI
 
 public struct RemindersState: Equatable {
   public var reminders: IdentifiedArrayOf<Reminder>
-  public var todaysReminders: IdentifiedArrayOf<Reminder> = []
-  public var otherReminders: IdentifiedArrayOf<Reminder> = []
   public var isSheetPresented: Bool { self.reminderCreation != nil }
   public var editMode: EditMode = .inactive
   public var noReminders: Bool {
@@ -30,6 +28,12 @@ public struct RemindersState: Equatable {
   public init(reminders: IdentifiedArrayOf<Reminder> = []) {
     self.reminders = reminders
   }
+  
+  public init(_ newState: Self) {
+    self.reminders = newState.reminders
+    self.editMode = newState.editMode
+    self.internalCreationState = newState.internalCreationState
+  }
 }
 
 public enum RemindersAction {
@@ -37,7 +41,6 @@ public enum RemindersAction {
   case addReminder
   case deleteReminders(IndexSet)
   case setSheet(isPresented: Bool)
-  case onAppear
   
   case reminderCreation(ReminderCreationAction)
 }
@@ -79,20 +82,10 @@ public let remindersReducer = Reducer<RemindersState, RemindersAction, Reminders
     
   case .setSheet(isPresented: false):
     state.reminderCreation = nil
-    sortReminders()
     return .none
     
   case .reminderCreation:
     return .none
-    
-  case .onAppear:
-    sortReminders()
-    return .none
-  }
-  
-  func sortReminders() {
-    state.todaysReminders = state.reminders.filter { $0.recurring.isToday(environment.date()) }
-    state.otherReminders = state.reminders.filter { !state.todaysReminders.contains($0) }
   }
 }
 .combined(
