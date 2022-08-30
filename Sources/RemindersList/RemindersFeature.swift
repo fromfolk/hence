@@ -28,12 +28,6 @@ public struct RemindersState: Equatable {
   public init(reminders: IdentifiedArrayOf<Reminder> = []) {
     self.reminders = reminders
   }
-  
-  public init(_ newState: Self) {
-    self.reminders = newState.reminders
-    self.editMode = newState.editMode
-    self.internalCreationState = newState.internalCreationState
-  }
 }
 
 public enum RemindersAction {

@@ -12,10 +12,6 @@ public struct TodayState: Equatable {
   public init(reminders: IdentifiedArrayOf<Reminder> = []) {
     self.reminders = reminders
   }
-  
-  public init(_ newState: Self) {
-    self.reminders = newState.reminders
-  }
 }
 
 public enum TodayAction {
