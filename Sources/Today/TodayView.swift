@@ -12,10 +12,21 @@ public struct TodayView: View {
         if !viewStore.dueReminders.isEmpty {
           Section(header: Text("Due")) {
             ForEach(viewStore.dueReminders) { reminder in
-              HStack {
-                Image(systemName: "square")
-                Text(reminder.name)
+              Button(action: { viewStore.send(.dueTapped(reminder)) }) {
+                HStack {
+                  Image(systemName: "square")
+                  Text(reminder.name)
+                }
               }
+              .foregroundColor(.primary)
+            }
+          }
+        }
+        if !viewStore.doneReminders.isEmpty {
+          Section(header: Text("Done")) {
+            ForEach(viewStore.doneReminders) { reminder in
+              Text(reminder.name)
+                .foregroundColor(.secondary)
             }
           }
         }
