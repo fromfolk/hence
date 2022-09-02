@@ -12,7 +12,8 @@ let package = Package(
     .library(name: "Hence", targets: ["Hence"]),
     .library(name: "Reminder", targets: ["Reminder"]),
     .library(name: "RemindersList", targets: ["RemindersList"]),
-    .library(name: "Today", targets: ["Today"])
+    .library(name: "Today", targets: ["Today"]),
+    .library(name: "NotificationsClient", targets: ["Notifications"])
   ],
   dependencies: [
     .package(url: "https://github.com/pointfreeco/swift-composable-architecture.git", from: "0.39.0"),
@@ -45,6 +46,13 @@ let package = Package(
     ),
     .target(
       name: "Today",
+      dependencies: [
+        .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
+        "Reminder"
+      ]
+    ),
+    .target(
+      name: "Notifications",
       dependencies: [
         .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
         "Reminder"
