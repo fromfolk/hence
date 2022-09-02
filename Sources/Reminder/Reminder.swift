@@ -8,6 +8,7 @@ public struct Reminder: Identifiable, Equatable {
   public let name: String
   public let image: String
   public let recurring: Recurring
+  public let lastCompleted: Date
   
   public var subheading: String {
     switch recurring {
@@ -20,11 +21,12 @@ public struct Reminder: Identifiable, Equatable {
     }
   }
   
-  public init(id: UUID, name: String, image: String, recurring: Recurring) {
+  public init(id: UUID, name: String, image: String, recurring: Recurring, lastCompleted: Date = .distantPast) {
     self.id = id
     self.name = name
     self.image = image
     self.recurring = recurring
+    self.lastCompleted = lastCompleted
   }
   
   public static func == (lhs: Reminder, rhs: Reminder) -> Bool {

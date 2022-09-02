@@ -4,8 +4,8 @@ import Foundation
 import Reminder
 
 public struct TodayState: Equatable {
-  var doneReminders: IdentifiedArrayOf<Reminder> = []
   var dueReminders: IdentifiedArrayOf<Reminder> = []
+  var doneReminders: IdentifiedArrayOf<Reminder> = []
   var laterReminders: IdentifiedArrayOf<Reminder> = []
     
   public var reminders: IdentifiedArrayOf<Reminder>
@@ -33,13 +33,29 @@ public struct TodayEnvironment {
 public let todayReducer = Reducer<TodayState, TodayAction, TodayEnvironment> { state, action, environment in
   switch action {
   case .onAppear:
-    state.dueReminders = state.reminders.filter { $0.recurring.isToday(environment.date()) && !state.doneReminders.contains($0) }
-    state.laterReminders = state.reminders.filter { !$0.recurring.isToday(environment.date()) }
+    sortReminders()
     return .none
     
   case .dueTapped(let reminder):
-    state.doneReminders.append(reminder)
-    state.dueReminders.removeAll { $0 == reminder }
+    let new = Reminder(
+      id: reminder.id,
+      name: reminder.name,
+      image: reminder.image,
+      recurring: reminder.recurring,
+      lastCompleted: environment.date()
+    )
+    
+    state.reminders.removeAll { $0 == reminder }
+    state.reminders.append(new)
+    
+    sortReminders()
+    
     return .none
+  }
+  
+  func sortReminders() {
+    state.dueReminders = state.reminders.filter { $0.recurring.isToday(environment.date()) && !$0.lastCompleted.isToday }
+    state.doneReminders = state.reminders.filter { $0.recurring.isToday(environment.date()) && $0.lastCompleted.isToday }
+    state.laterReminders = state.reminders.filter { !$0.recurring.isToday(environment.date()) }
   }
 }
